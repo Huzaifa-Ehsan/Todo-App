@@ -1,7 +1,5 @@
 import Layout from "@/layout/Layout";
-
 import Head from "next/head";
-import FormComponent from "./components/form.component";
 
 export default function Home() {
   return (
@@ -9,12 +7,11 @@ export default function Home() {
       <Head>
         <title>Todo App</title>
       </Head>
-      <Layout>
-        <section className="text-center">
-          <h1 className="font-bold text-2xl my-2">Todo App</h1>
-          <FormComponent />
+        <section className="bg-[#eee] h-screen">
+          <div className="flex justify-center items-center h-full">
+            <h1 className="font-bold text-4xl">Welcome to Todo App</h1>
+          </div>
         </section>
-      </Layout>
     </>
   );
 }

@@ -9,7 +9,7 @@ type Props = {
   email: string;
 };
 
-const FormComponent = () => {
+const AddUserComponent = () => {
   const [data, setData] = useState<Props>({ name: "", email: "" });
   const formik = useFormik({
     initialValues: {
@@ -56,4 +56,4 @@ const FormComponent = () => {
   );
 };
 
-export default FormComponent;
+export default AddUserComponent;
