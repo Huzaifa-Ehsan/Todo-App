@@ -4,11 +4,13 @@ import {
   ChevronDownIcon,
   PlusIcon,
   ClipboardDocumentIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const SideBarComponent = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const handleOpen = () => {
     setOpen(!open);
@@ -17,7 +19,7 @@ const SideBarComponent = () => {
   return (
     <div>
       <Link href={"/"}>
-        <h1 className="font-bold text-center text-2xl my-2">Todos</h1>
+        <h1 className="font-bold text-center text-3xl my-2">Todos</h1>
       </Link>
       <div
         onClick={handleOpen}
@@ -31,15 +33,27 @@ const SideBarComponent = () => {
         )}
       </div>
       {open ? (
-        <div className="space-y-7">
+        <div>
           <Link href={"/create"}>
-            <div className="p-4 hover:bg-[#d3d2d2] flex items-center justify-between">
+            <div
+              className={
+                router.pathname === "/create"
+                  ? `p-4 bg-[#d3d2d2] flex items-center justify-between my-2 font-bold`
+                  : `p-4 hover:bg-[#d3d2d2] flex items-center justify-between my-2 font-bold`
+              }
+            >
               <button>Create</button>
               <PlusIcon className="w-4 h-4" />
             </div>
           </Link>
           <Link href={"/list"}>
-            <div className="p-4 hover:bg-[#d3d2d2] flex items-center justify-between">
+            <div
+              className={
+                router.pathname === "/list"
+                  ? `p-4 bg-[#d3d2d2] flex items-center justify-between font-bold`
+                  : `p-4 hover:bg-[#d3d2d2] flex items-center justify-between font-bold`
+              }
+            >
               <button>List</button>
               <ClipboardDocumentIcon className="w-4 h-4" />
             </div>
