@@ -1,9 +1,62 @@
-import { useAppSelector } from "@/redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { deleteTodo } from "@/redux/slice/todo";
+import { TrashIcon } from "@heroicons/react/24/outline";
+import {
+  Breadcrumbs,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import Link from "next/link";
 
 const TodoListPage = () => {
   const data = useAppSelector((state) => state.Todo.data);
-  // console.log(data);
-  return <div>TodoListPage</div>;
+  const dispatch = useAppDispatch();
+
+  const HandleDelete = (id: string) => {
+    dispatch(deleteTodo(id));
+  };
+  return (
+    <div className="m-4">
+      <h1 className="font-bold text-3xl">Todo List</h1>
+      <div className="flex space-x-4 my-4">
+        <Breadcrumbs separator=">">
+          <Link href={"/"}>Dashboard</Link>
+          <Link href={"/create"}>Create a New Todo</Link>
+          <h1 className="text-[#000]">List Todo</h1>
+        </Breadcrumbs>
+      </div>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell className="font-bold">Title</TableCell>
+            <TableCell className="font-bold">Description</TableCell>
+            <TableCell className="font-bold">Date</TableCell>
+            <TableCell className="font-bold">Actions</TableCell>
+          </TableRow>
+        </TableHead>
+        {data.map((todo, index) => {
+          return (
+            <TableBody key={index}>
+              <TableRow>
+                <TableCell>{todo.title}</TableCell>
+                <TableCell>{todo.description}</TableCell>
+                <TableCell>{todo.date}</TableCell>
+                <TableCell>
+                  <TrashIcon
+                    className="w-4 h-4"
+                    onClick={() => HandleDelete(todo.id)}
+                  />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          );
+        })}
+      </Table>
+    </div>
+  );
 };
 
 export default TodoListPage;

@@ -4,6 +4,7 @@ type Props = {
   title: string;
   description: string;
   date: string;
+  id: string;
 };
 
 export const TodoSlice = createSlice({
@@ -15,7 +16,10 @@ export const TodoSlice = createSlice({
     addTodo: (state, action) => {
       state.data = [...state.data, action.payload];
     },
+    deleteTodo: (state, action) => {
+      state.data = state.data.filter((todo) => todo.id !== action.payload);
+    },
   },
 });
-export const { addTodo } = TodoSlice.actions;
+export const { addTodo, deleteTodo } = TodoSlice.actions;
 export default TodoSlice.reducer;

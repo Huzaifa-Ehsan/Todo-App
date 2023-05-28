@@ -5,33 +5,45 @@ import { addTodo } from "@/redux/slice/todo";
 import { UserIcon, AtSymbolIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { Box, Paper } from "@mui/material";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useId } from "react";
 
 type Props = {
   title: string;
   description: string;
   date: string;
+  id: string;
 };
 
 const CreateFormComponent = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const id = useId();
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
       date: "",
+      id: "",
     },
     onSubmit,
   });
   async function onSubmit(values: Props) {
-    dispatch(
+    if ((values.title && values.description && values.date) === "") {
+      alert("Please add title, description and date");
+      return;
+    }
+
+    await dispatch(
       addTodo({
         title: values.title,
         description: values.description,
         date: values.date,
+        id: id,
       })
     );
+    await router.push("/list");
   }
 
   return (
