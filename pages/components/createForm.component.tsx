@@ -1,5 +1,7 @@
 import { ButtonComponent } from "@/lib/button/button.component";
 import { TextFieldComponent } from "@/lib/textfield/text-field.component";
+import { useAppDispatch } from "@/redux/hooks/hooks";
+import { addTodo } from "@/redux/slice/todo";
 import { UserIcon, AtSymbolIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { Box, Paper } from "@mui/material";
 import { useFormik } from "formik";
@@ -11,12 +13,9 @@ type Props = {
   date: string;
 };
 
-const CreateTodoForm = () => {
-  const [data, setData] = useState<Props>({
-    title: "",
-    description: "",
-    date: "",
-  });
+const CreateFormComponent = () => {
+  const dispatch = useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -26,8 +25,13 @@ const CreateTodoForm = () => {
     onSubmit,
   });
   async function onSubmit(values: Props) {
-    console.log(values);
-    setData(values);
+    dispatch(
+      addTodo({
+        title: values.title,
+        description: values.description,
+        date: values.date,
+      })
+    );
   }
 
   return (
@@ -72,4 +76,4 @@ const CreateTodoForm = () => {
   );
 };
 
-export default CreateTodoForm;
+export default CreateFormComponent;

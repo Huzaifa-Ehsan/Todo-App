@@ -1,6 +1,6 @@
 import { Breadcrumbs } from "@mui/material";
 import Link from "next/link";
-import CreateTodoForm from "./components/createForm.component";
+import CreateFormComponent from "./components/createForm.component";
 
 const TodoCreatePage = () => {
   return (
@@ -13,7 +13,7 @@ const TodoCreatePage = () => {
           <h1 className="text-[#000]">Create Todo</h1>
         </Breadcrumbs>
       </div>
-      <CreateTodoForm />
+      <CreateFormComponent />
     </div>
   );
 };
