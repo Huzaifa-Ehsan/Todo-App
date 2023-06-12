@@ -6,11 +6,12 @@ type Props = {
   date: string;
   id: string;
 };
+const initialState: Props[] = [];
 
 export const TodoSlice = createSlice({
   name: "todoSlice",
   initialState: {
-    data: [] as Props[],
+    data: initialState,
   },
   reducers: {
     addTodo: (state, action) => {
@@ -19,7 +20,16 @@ export const TodoSlice = createSlice({
     deleteTodo: (state, action) => {
       state.data = state.data.filter((todo) => todo.id !== action.payload);
     },
+    updateTodo: (state, action) => {
+      const { id, title, description, date } = action.payload;
+      const existingTodo = state.data.find((todo) => todo.id === id);
+      if (existingTodo) {
+        existingTodo.title = title;
+        existingTodo.description = description;
+        existingTodo.date = date;
+      }
+    },
   },
 });
-export const { addTodo, deleteTodo } = TodoSlice.actions;
+export const { addTodo, deleteTodo, updateTodo } = TodoSlice.actions;
 export default TodoSlice.reducer;

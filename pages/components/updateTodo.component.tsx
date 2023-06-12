@@ -1,12 +1,13 @@
 import { ButtonComponent } from "@/lib/button/button.component";
 import { TextFieldComponent } from "@/lib/textfield/text-field.component";
-import { useAppDispatch } from "@/redux/hooks/hooks";
-import { addTodo } from "@/redux/slice/todo";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { addTodo, updateTodo } from "@/redux/slice/todo";
 import { UserIcon, AtSymbolIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { Box, Paper } from "@mui/material";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { useId } from "react";
+import { FormEvent, useId, useState } from "react";
+import { useParams } from "next/navigation";
 
 type Props = {
   title: string;
@@ -15,48 +16,42 @@ type Props = {
   id: string;
 };
 
-const CreateFormComponent = () => {
-  const dispatch = useAppDispatch();
+const UpdateTodoComponent = () => {
   const router = useRouter();
-  const id = useId();
+  const todos = useAppSelector((state) => state.Todo.data);
+  const existingTodo = todos.find((todo) => todo.id === router.query.id);
+  const title = existingTodo?.title;
+  const description = existingTodo?.description;
+  const date = existingTodo?.date;
+  const [updateTitle, setUpdatetitle] = useState(title);
+  const [updateDescription, setUpdateDescription] = useState(description);
+  const [updateDate, setUpdateDate] = useState(date);
+  const dispatch = useAppDispatch();
 
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      description: "",
-      date: "",
-      id: "",
-    },
-    onSubmit,
-  });
-  async function onSubmit(values: Props) {
-    if ((values.title && values.description && values.date) === "") {
-      alert("Please add title, description and date");
-      return;
-    }
-
+  const HandleUpdate = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch(
-      addTodo({
-        title: values.title,
-        description: values.description,
-        date: values.date,
-        id: id,
+      updateTodo({
+        id: router.query.id,
+        title: updateTitle,
+        description: updateDescription,
+        date: updateDate,
       })
     );
     router.push("/list");
-  }
-
+  };
   return (
     <>
       <Box className="w-full h-[70vh] rounded-lg p-8" component={Paper}>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={HandleUpdate}>
           <div className="space-x-2">
             <TextFieldComponent
               label="Title"
               type="text"
               EndAdornment={<UserIcon className="h-4 w-4 text-[#000]" />}
               inputProps={{ autoComplete: "off" }}
-              {...formik.getFieldProps("title")}
+              value={updateTitle}
+              onChange={(e) => setUpdatetitle(e.target.value)}
             />
             <TextFieldComponent
               label="Description"
@@ -64,19 +59,21 @@ const CreateFormComponent = () => {
               EndAdornment={<AtSymbolIcon className="h-4 w-4 text-[#000]" />}
               required
               inputProps={{ autoComplete: "off" }}
-              {...formik.getFieldProps("description")}
+              value={updateDescription}
+              onChange={(e) => setUpdateDescription(e.target.value)}
             />
             <TextFieldComponent
               type="date"
               required
               inputProps={{ autoComplete: "off" }}
-              {...formik.getFieldProps("date")}
+              value={updateDate}
+              onChange={(e) => setUpdateDate(e.target.value)}
             />
             <span>
               <ButtonComponent
                 onClick={() => {}}
                 type="submit"
-                buttonText="Add Todo"
+                buttonText="Update Todo"
                 className="bg-[#707070] text-[#fff] hover:bg-[#545455]"
                 endIcon={<PlusIcon className="w-4 h-4 text-[#fff]" />}
               />
@@ -88,4 +85,4 @@ const CreateFormComponent = () => {
   );
 };
 
-export default CreateFormComponent;
+export default UpdateTodoComponent;
